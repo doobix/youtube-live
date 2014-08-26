@@ -1,7 +1,7 @@
 var express = require('express');
 var partials = require('express-partials');
 var app = express();
-var port = process.env.PORT || 4568;
+var port = process.env.PORT || 8080;
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

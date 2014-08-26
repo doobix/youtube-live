@@ -24,8 +24,13 @@ myDataRef.child("videoTime").on("value", function(snapshot) {
 // Get video ID
 myDataRef.child("videoID").on("value", function(snapshot) {
   videoID = snapshot.val();
-  $("#url").val("https://www.youtube.com/watch?v="+videoID)
-  createPlayer();
+  $("#url").val("https://www.youtube.com/watch?v="+videoID);
+  // player.destroy;
+  if (player) {
+    player.loadVideoById(videoID);
+  } else {
+    createPlayer();
+  }
 });
 
 // Get player state
@@ -67,6 +72,7 @@ function createPlayer() {
           'onStateChange': onPlayerStateChange
         }
       });
+  console.log("player?: ", player);
     });
   });
 }
@@ -115,7 +121,6 @@ function loadVideo() {
   var match = /=([A-Za-z0-9_-]+)/g;
   var result = match.exec(url);
   videoID = result[1];
-  player.loadVideoById(videoID);
 
   if (host) {
     myDataRef.child("videoID").set(videoID);
