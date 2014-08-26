@@ -12,6 +12,10 @@ app.get('/',
 function(req, res) {
   res.render('index');
 });
+app.get('/host', 
+function(req, res) {
+  res.render('host');
+});
 
 app.listen(8080);
 console.log('Server is listening on 8080');
