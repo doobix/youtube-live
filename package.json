@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/seewes/2014-07-solo",
   "dependencies": {
-    "express": "^4.8.5"
+    "ejs": "^1.0.0",
+    "express": "^4.8.5",
+    "express-partials": "^0.3.0",
+    "jquery": "^2.1.1"
   }
 }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Broadcast</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src='components/jquery/dist/jquery.min.js'></script>
+  <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+  <script type="text/javascript" src="js/swfobject.js"></script> 
+  <script type="text/javascript">
+    var videoID = "qraPm7OwtVA";
+    var playTime = 0;
+    
+    // FIREBASE
+    var myDataRef = new Firebase('https://dazzling-inferno-4118.firebaseio.com/');
+    myDataRef.child("videoTime").on("value", function(snapshot) {
+      playTime = snapshot.val();
+      console.log("playtime changed:", playTime);
+    });
+    myDataRef.child("videoID").on("value", function(snapshot) {
+      videoID = snapshot.val();
+      $("#url").val("https://www.youtube.com/watch?v="+videoID)
+      console.log("videoID changed:", snapshot.val());
+      createPlayer();
+    });
+
+    // YOUTUBE
+    function createPlayer() {
+      var ytplayer = "";
+      var playTimer;
+      var params = { allowScriptAccess: "always" };
+      var atts = { id: "myytplayer" };
+      swfobject.embedSWF("https://www.youtube.com/v/"+videoID+"?version=3&playerapiid=ytplayer&enablejsapi=1", "ytapiplayer", "100%", "100%", "8", null, null, params, atts);
+    }
+
+    function play() {
+      if (ytplayer) {
+        ytplayer.playVideo();
+      }
+    }
+
+    function onYouTubePlayerReady(playerId) {
+      console.log('ready');
+      ytplayer = document.getElementById("myytplayer");
+      ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+    }
+
+    function onytplayerStateChange(newState) {
+      myDataRef.child("state").set(newState);
+      if (newState === 1) {
+        playTimer = setInterval(updateTime, 100);
+      } else {
+        clearInterval(playTimer);
+      }
+    }
+
+    function updateTime() {
+      playTime = ytplayer.getCurrentTime();
+      myDataRef.child("videoTime").set(playTime);
+    }
+
+    function loadVideo() {
+      var url = $("#url").val();
+      // var url = "https://www.youtube.com/watch?v=qraPm7OwtVA";
+      var match = /=([A-Za-z0-9_]+)/g;
+      var result = match.exec(url);
+      console.log("new video ID: ", result[1]);
+      videoID = result[1];
+      myDataRef.child("videoID").set(videoID);
+      ytplayer.loadVideoById(videoID);
+    }
+  </script>
+</head>
+<body>
+  <%- body %>
+</body>
+</html>

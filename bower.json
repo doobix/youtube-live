@@ -6,6 +6,7 @@
     "Wesley Pascual <wesleypascual@gmail.com>"
   ],
   "license": "MIT",
+  "directory": "public/components",
   "ignore": [
     "**/.*",
     "node_modules",
