@@ -126,15 +126,15 @@ function loadVideo(url) {
   var result = match.exec(url);
   if (result) {
     console.log("got result: ", result[1]);
-    videoID = result[1];
+    if (host && videoID !== result[1]) {
+      videoID = result[1];
+
+      myDataRef.child("videoTime").set(0);
+      myDataRef.child("videoID").set(videoID);
+    }
   } else {
     console.log("No result: ", result);
     player.loadPlaylist({list:url,listType:"search",index:0,suggestedQuality:"small"});
-  }
-
-  if (host) {
-    myDataRef.child("videoTime").set(0);
-    myDataRef.child("videoID").set(videoID);
   }
 }
 
