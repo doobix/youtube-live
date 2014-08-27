@@ -25,8 +25,8 @@ myDataRef.child("videoTime").on("value", function(snapshot) {
 myDataRef.child("videoID").on("value", function(snapshot) {
   videoID = snapshot.val();
   $("#url").val("https://www.youtube.com/watch?v="+videoID);
-  // player.destroy;
   if (player) {
+    player.seekTo();
     player.loadVideoById(videoID);
   } else {
     createPlayer();
@@ -37,12 +37,18 @@ myDataRef.child("videoID").on("value", function(snapshot) {
 myDataRef.child("state").on("value", function(snapshot) {
   playerState = snapshot.val();
   console.log("STATE: ", playerState);
+  if (host) {
+    var videoUrl = player.getVideoUrl();
+    console.log("playing: ", videoUrl);
+    loadVideo(videoUrl);
+  }
   if (!host) {
-    if (playerState === 1) {
-      seek(playTime);
-    } else {
-      seek(playTime);
-    }
+    seek(playTime);
+    // if (playerState === 1) {
+    //   seek(playTime);
+    // } else {
+    //   seek(playTime);
+    // }
   }
 });
 
@@ -72,14 +78,13 @@ function createPlayer() {
           'onStateChange': onPlayerStateChange
         }
       });
-  console.log("player?: ", player);
     });
   });
 }
 
 // Seek the video when player is loaded
 function onPlayerReady(event) {
-  seek(playTime);
+  seek();
 }
 
 // Set state when state changes
@@ -90,16 +95,15 @@ function onPlayerStateChange(event) {
   }
 }
 
-function seek(time) {
-  time = time || 0;
+function seek() {
   if (player) {
     if (playerState === 1) {
       player.playVideo();
     } else {
       player.pauseVideo();
     }
-    player.seekTo(time);
-    console.log("seeked to time:", time);
+    player.seekTo(playTime);
+    console.log("seeked to time:", playTime);
   }
 }
 function stop() {
@@ -116,13 +120,20 @@ function updateTime() {
   }
 }
 
-function loadVideo() {
-  var url = $("#url").val();
-  var match = /=([A-Za-z0-9_-]+)/g;
+function loadVideo(url) {
+  url = url || $("#url").val();
+  var match = /v=([A-Za-z0-9_-]*)*/g;
   var result = match.exec(url);
-  videoID = result[1];
+  if (result) {
+    console.log("got result: ", result[1]);
+    videoID = result[1];
+  } else {
+    console.log("No result: ", result);
+    player.loadPlaylist({list:url,listType:"search",index:0,suggestedQuality:"small"});
+  }
 
   if (host) {
+    myDataRef.child("videoTime").set(0);
     myDataRef.child("videoID").set(videoID);
   }
 }
