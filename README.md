@@ -15,6 +15,9 @@ Oh, and I also like to write press-releases in what I call "Oprah-speak" for mai
 ## Summary ##
   > Watch the same YouTube video on multiple computers at the same time.
 
+## Live Demo ##
+  > http://youtube.azurewebsites.net
+
 ## Problem ##
   > When you and your friends want to watch a video together at the same time, all of you have to press Play at the exact time.
 
