@@ -5,6 +5,16 @@ var port = process.env.PORT || 8080;
 var sys = require('sys')
 var exec = require('child_process').exec;
 var fs = require('fs');
+var bodyParser = require('body-parser');
+
+var app = express();
+app.use(bodyParser());
+
+app.post('/uploaded',function(req, res, next){
+    var txt_folder_name = req.body.txtFolderName;
+    //...
+});
+
 var youtubedl = require('youtube-dl');
 var video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
   // Optional arguments passed to youtube-dl.
@@ -31,7 +41,7 @@ function(req, res) {
 });
 app.get('/host', 
 function(req, res) {
-  exec("ls -la", puts);
+  exec("sh ../stream.sh ", puts);
 });
 app.get('/view', 
 function(req, res) {
