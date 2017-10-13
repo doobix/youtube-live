@@ -7,7 +7,6 @@ var exec = require('child_process').exec;
 var fs = require('fs');
 var bodyParser = require('body-parser');
 
-var app = express();
 app.use(bodyParser());
 
 app.post('/uploaded',function(req, res, next){
