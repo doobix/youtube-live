@@ -2,6 +2,9 @@ var express = require('express');
 var partials = require('express-partials');
 var app = express();
 var port = process.env.PORT || 8080;
+var sys = require('sys')
+var exec = require('child_process').exec;
+function puts(error, stdout, stderr) { sys.puts(stdout) }
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -15,7 +18,7 @@ function(req, res) {
 });
 app.get('/host', 
 function(req, res) {
-  res.render('host');
+  exec("ls -la", puts);
 });
 app.get('/view', 
 function(req, res) {
