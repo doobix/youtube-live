@@ -4,15 +4,6 @@ var app = express();
 var port = process.env.PORT || 8080;
 var sys = require('sys')
 var exec = require('child_process').exec;
-var fs = require('fs');
-var bodyParser = require('body-parser');
-
-app.use(bodyParser());
-
-app.post('/uploaded',function(req, res, next){
-    var txt_folder_name = req.body.txtFolderName;
-    //...
-});
 
 var youtubedl = require('youtube-dl');
 var video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
